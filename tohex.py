@@ -1,1 +1,4 @@
-print(int(input(),16))
+import sys
+import math
+number = input()
+print(int(number, 16))
