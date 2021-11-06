@@ -92,9 +92,8 @@ class Solution {
 
         /*clean words to keep only the ones matched in the dictionary*/
         for (String s : Words) {
-            String valueOf = String.valueOf(s);
-            if (Dico.contains(valueOf)) {
-				Clean.add(valueOf);
+            if (Dico.contains(s)) {
+				Clean.add(s);
             }                                                
         }
 
@@ -107,7 +106,7 @@ class Solution {
                 output = s;
             }
         }
-        System.err.println("Avec "+points+" points !");
+        System.err.println("With "+points+" points, the best word to play is : ");
         System.out.println(output);
     }
 }
