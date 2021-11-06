@@ -73,6 +73,7 @@ class Solution {
             Dico.add (w); //add words to dico
         }
         String chars = in.nextLine(); //getting the letters to play
+        in.close();
 
         
         /*Print Dictionnary*/
@@ -86,13 +87,14 @@ class Solution {
         System.err.println("\t"+chars); 
 
         /*Generating all possible words from these letters*/
-        Set<String> Words = permute(chars); //
+        Set<String> Words = permute(chars); //A REFAIRE
         Set<String> Clean = new HashSet<>();
 
         /*clean words to keep only the ones matched in the dictionary*/
         for (String s : Words) {
-            if (Dico.contains(s)) {
-                Clean.add(s);
+            String valueOf = String.valueOf(s);
+            if (Dico.contains(valueOf)) {
+				Clean.add(valueOf);
             }                                                
         }
 
@@ -105,6 +107,7 @@ class Solution {
                 output = s;
             }
         }
+        System.err.println("Avec "+points+" points !");
         System.out.println(output);
     }
 }
