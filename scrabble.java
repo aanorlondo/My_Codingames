@@ -62,19 +62,21 @@ class Solution {
     public static Set<Word> filter(String chars, Set<Word> dico) {
         Set<Word> set = new HashSet<>();
         for (Word s : dico) {
-            Set<Letter> letters = buildSet(chars);
-            boolean playable = true;
-            Word word = s;
-            for (int i = 0 ; i < s.w.length() && playable ; i ++)
-            {
-                if (!include(letters,s.w.charAt(i),true)) 
-                    playable = false;
+            if (s.w.length() <= chars.length()) {
+                Set<Letter> letters = buildSet(chars);
+                boolean playable = true;
+                Word word = s;
+                for (int i = 0 ; i < s.w.length() && playable ; i ++)
+                {
+                    if (!include(letters,s.w.charAt(i),true)) 
+                        playable = false;
+                }
+                if (playable) {
+                    word.points = points(word.w);
+                    set.add(word);
+                }
+                letters.clear();
             }
-            if (playable) {
-                word.points = points(word.w);
-                set.add(word);
-            }
-            letters.clear();
         }
         return set;
     }
