@@ -1,41 +1,49 @@
-/**
- * Auto-generated code below aims at helping you parse
- * the standard input according to the problem statement.
- **/
+function hasDuplicates(array) {
+    return (new Set(array)).size !== array.length;
+}
+
+function getColumn(array, col) {
+    return array.map(function(row) {
+        return row[col];
+    });
+}
+
+function getSubMatrix(matrix, row, col, len) {
+    return matrix.slice(row, row + len).map(row => row.slice(col, col + len));
+}
+
+function flatten(matrix) {
+  return matrix.reduce(function (flat, toFlatten) {
+    return flat.concat(Array.isArray(toFlatten) ? flatten(toFlatten) : toFlatten);
+  }, []);
+}
 
 var  grille = new Array(9);
 for (let i = 0; i < 9; i++) {
     var inputs = readline().split(' ');
+    grille[i] = new Array(9);
     for (let j = 0; j < 9; j++) {
-        grille[j] = new Array(9);
-        const n = parseInt(inputs[j]);
-        grille[i][j] = n;
+        grille[i][j] = parseInt(inputs[j]);
     }
 }
 
+//console.table(grille);
+
+var next = true;
 for (let i = 0; i < 9 ; i++) {
-    for (let j = 0 ; j < 9 ; j++) {
-        console.error(grille[i][j]);
-        for (let v = 0 ; v < 9 ; j++) { //check vertically
-            if (grille[i][j] == grille[v][j] && (i != v) ) {
-                console.log('false');
-                exit(-1);
-            }
-        }
-        for (let h = 0 ; h < 9 ; j++) { //check horizontally
-            if (grille[i][j] == grille[i][h] && (j != h) ) {
-                console.log('false');
-                exit(-1);
-            }
-        }
-        for (v = i - (i % 3) ; i < 8 - i - 3 - (i % 3) ; i++) { //the squares
-            for (h = j - (j % 3) ; j < 8 - j - 3 - (j % 3) ; j++) {
-                if(grille[i][j] == grille[v][h] && (i != v) && (j != h)) {
-                    console.log('false');
-                    exit(-1);
-                }
-            }
+    if (hasDuplicates(grille[i])) {
+        next = false; break; //rows
+    }
+    if (hasDuplicates(getColumn(grille,i))) {
+        next = false; break; //columns
+    }
+}
+for (let i = 0; i < 9; i+=3) {
+    for (let j = 0; j < 9; j += 3) {
+        if (hasDuplicates(flatten(getSubMatrix(grille,i,j,3))))
+        {
+            next = false; break; //columns
         }
     }
 }
-console.log('true');
+console.log(next);
