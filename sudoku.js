@@ -32,8 +32,6 @@ for (let i = 0; i < 9; i++) {
     }
 }
 
-//console.table(grille);
-
 var next = true;
 for (let i = 0; i < 9 ; i++) {
     /*CHECKING THE ROWS*/
@@ -48,8 +46,8 @@ for (let i = 0; i < 9 ; i++) {
     }
 }
 /*CHECKING THE 9 SUB GRIDS*/
-for (let i = 0; i < 9; i+=3) {
-    for (let j = 0; j < 9; j += 3) {
+for (let i of [0, 3, 6]) {
+    for (let j of [0, 3, 6]) {
         //here is a sexy way to do it : game grid -> sub grid --flatten--> array --set--> check duplicates
         if (hasDuplicates(flatten(getSubMatrix(grille,i,j,3))))
         {
@@ -58,3 +56,4 @@ for (let i = 0; i < 9; i+=3) {
     }
 }
 console.log(next);
+//UNCOMM ME !!! --> console.table(grille);
