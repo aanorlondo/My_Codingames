@@ -5,6 +5,7 @@ using namespace std;
 
 extern const string alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
+//get alphabetical position of a char
 int getAlphaPos(char c) {
     for (int i=0; i<alpha.length(); i++) {
         if (c==alpha[i]) return i;
@@ -12,6 +13,7 @@ int getAlphaPos(char c) {
     return -1;
 }
 
+//get position of a char in a given string
 int getPos(char c, string s) {
         for (int i=0; i<s.length(); i++) {
         if (c==s[i]) return i;
@@ -19,14 +21,17 @@ int getPos(char c, string s) {
     return -1;
 }
 
+//get letter by position from alphabetical sequence
 char getAlpha(int c) {
     return alpha[c]; //not found
 }
 
+//cesar with a given degre
 char shift(int degres, char c) {
     return getAlpha((getAlphaPos(c)+degres)%26);
 }
 
+//filter a string by a given rotor
 string rotor(string m, string rotor) {
     string code = "";
     for (int i = 0; i < m.length() ; i++) {
@@ -35,6 +40,7 @@ string rotor(string m, string rotor) {
     return code;
 }
 
+//the encode sequence
 string encode(string m, string rotors[], int degres) {
     string code = m;
     cerr << "Encoding : "<< code << endl;
