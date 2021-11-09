@@ -26,10 +26,6 @@ char getAlpha(int c) {
     return alpha[c]; //not found
 }
 
-//cesar with a given degre
-char shift(int degres, char c) {
-    return getAlpha((getAlphaPos(c)+degres)%26);
-}
 
 //filter a string by a given rotor
 string rotor(string m, string rotor) {
@@ -40,16 +36,43 @@ string rotor(string m, string rotor) {
     return code;
 }
 
+string reverserotor(string m, string rotor) {
+    string code = "";
+    for (int i = 0; i < m.length() ; i++) {
+        code += getAlpha(getPos(m[i],rotor));
+    }
+    return code;
+}
+
+//cesar with a given degre
+char shift(int degres, char c) {
+    if (getAlphaPos(c) + degres < 0 ) {
+        return getAlpha((getAlphaPos(c)+degres)%26+26);
+    }
+    return getAlpha((getAlphaPos(c)+degres)%26);
+}
+
+string cesar(string m, int degres) {
+    string str = m;
+    for (int i = 0; i < m.length(); i++) {
+        str[i] = shift(degres+i,str[i]);
+    }
+    return str;
+}
+
+string reversecesar(string m, int degres) {
+    string str = m;
+    for (int i = 0; i < str.length(); i++) {
+        str[i] = shift(-degres-i,str[i]);
+    }
+    return str;
+}
+
 //the encode sequence
 string encode(string m, string rotors[], int degres) {
-    string code = m;
-    cerr << "Encoding : "<< code << endl;
+    cerr << "Encoding : "<< m << endl;
     /*CESAR phase*/
-    for (int i = 0; i < code.length(); i++) {
-        //cerr << "\t\tChar : "<< code[i] ;
-        code[i] = shift(degres+i,code[i]);
-        //cerr << " becomes : " << code[i] << endl;
-    }
+    string code = cesar(m,degres);
     /*ROTORS 1 to 3*/
     cerr << "\tAfter Cesar : "<< code << endl;
     code = rotor(code,rotors[0]);
@@ -62,6 +85,23 @@ string encode(string m, string rotors[], int degres) {
     return code;
 }
 
+//the decode sequence
+string decode(string m, string rotors[], int degres) {
+    cerr << "Decoding : "<< m << endl;
+    /*Reverse ROTORS 3 to 1*/
+    string clear = reverserotor(m,rotors[2]);
+    cerr << "\tAfter reverse rotor 3 : "<< clear << endl;
+    clear = reverserotor(clear,rotors[1]);
+    cerr << "\tAfter reverse rotor 2 : "<< clear << endl;
+    clear = reverserotor(clear,rotors[0]);
+    cerr << "\tAfter reverse rotor 1 : "<< clear << endl;
+    /*Reverse CESAR phase*/
+    clear = reversecesar(clear, degres);
+    cerr << "\tAfter reverse Cesar : "<< clear << endl;
+    cerr << "**FINAL DECRYPTION :" << endl;
+    return clear;
+}
+
 int main() {
     string OP; getline(cin, OP); //operator (ENCODE / DECODE)
     int SHIFT; cin >> SHIFT; cin.ignore(); // initial shift degree
@@ -70,10 +110,15 @@ int main() {
         getline(cin, rotors[i]); //storing the rotors
     }
     string message; getline(cin, message);
+    cerr << "**INPUTS**" << endl;
+    cerr << "SHIFT = " << SHIFT << " | OP = " << OP << " | STR = " << message.length() << endl;
+    cerr << "Rotor 1 = " << rotors[0] << endl;
+    cerr << "Rotor 2 = " << rotors[1] << endl;
+    cerr << "Rotor 3 = " << rotors[2] << endl;
+    cerr << "************************************" << endl;
     // the encode sequence
     if (OP == "ENCODE") cout << encode(message,rotors,SHIFT) << endl;
-    else {
-        // the decode sequence
-        if (OP == "DECODE") cout << "NOT IMPLEMENTED YET" << endl;
-    }
+    else
+     // the decode sequence
+    if (OP == "DECODE") cout << decode(message,rotors,SHIFT) << endl;
 }
