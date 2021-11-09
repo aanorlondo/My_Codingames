@@ -46,10 +46,10 @@ string reverserotor(string m, string rotor) {
 
 //cesar with a given degre
 char shift(int degres, char c) {
-    if (getAlphaPos(c) + degres < 0 ) {
-        return getAlpha((getAlphaPos(c)+degres)%26+26);
-    }
-    return getAlpha((getAlphaPos(c)+degres)%26);
+    int d = getAlphaPos(c) + degres; 
+    while ( d <= -26 ) d += 26;
+    if (d<0) return getAlpha(d%26+26);
+             return getAlpha(d%26);
 }
 
 string cesar(string m, int degres) {
@@ -98,6 +98,10 @@ string decode(string m, string rotors[], int degres) {
     /*Reverse CESAR phase*/
     clear = reversecesar(clear, degres);
     cerr << "\tAfter reverse Cesar : "<< clear << endl;
+    /*for (int i = 0 ; i < clear.length() ; i++) {
+        cerr << getAlphaPos(clear[i]) << " ";
+    }
+    cerr << endl;*/
     cerr << "**FINAL DECRYPTION :" << endl;
     return clear;
 }
@@ -116,6 +120,7 @@ int main() {
     cerr << "Rotor 2 = " << rotors[1] << endl;
     cerr << "Rotor 3 = " << rotors[2] << endl;
     cerr << "************************************" << endl;
+
     // the encode sequence
     if (OP == "ENCODE") cout << encode(message,rotors,SHIFT) << endl;
     else
