@@ -1,9 +1,8 @@
-p=3 //int(input())
+p=3 #int(input())
 t=[]
-for i in range (p): 
-	t.append(0)
+for i in range (p): t.append(0)
 r=0
-for c in ("64658662138"): //input()
+for c in ("14658612368946512362138"): #input()
     print("Player",r+1,"plays",c)
     if (c=='6') :
         t[r]+=1
