@@ -1,62 +1,68 @@
+// define switches
+let switches = {
+    1: [1, 2, 4, 5],
+    2: [1, 2, 3],
+    3: [2, 3, 5, 6],
+    4: [1, 4, 7],
+    5: [2, 4, 5, 6, 8],
+    6: [3, 6, 9],
+    7: [4, 5, 7, 8],
+    8: [7, 8, 9],
+    9: [5, 6, 8, 9]
+}
+
+// define solution
+let solution = "****~****"
+
+// modify string at given index
+function setCharAt(str,index,chr) {
+    if(index > str.length-1) return str;
+    return str.substring(0,index) + chr + str.substring(index+1);
+}
+
 // get inputs
-function input(): array {
-    var matrix = [readline(), readline(), readline()];
+function input() {
+    var matrix = (readline()+readline()+readline()).replace(/ /g, '');;
     const buttons = readline();
     return [matrix, buttons];
 }
 
 // reverse a position
-function reverse(button: char):char {
-    return button == '*' ? '~' : '*';
+function reverse(square, position) {
+    const newSymbol = square.charAt(position - 1) == '*' ? '~' : '*';
+    return setCharAt(square, (position-1), newSymbol);
 }
 
-// reverse a row (3 buttons)
-function reverse_row(row: array, size: int): array{
-    for (i = 0; i <= size; i++) {
-        row[i] = reverse(button=row[i]);
-    }
-    return row;
-}
-
-// reverse a square (2 x 2 buttons)
-function reverse_square(square: array): array{
-    for (i = 0; i < 2; i++) {
-        square[i] = reverse_row(row=square[i], size=2);
+// press button
+function transform(square, button) {
+    for (const b of switches[button]) {
+        square = reverse(square, position=b);
     }
     return square;
 }
 
-function transform(matrix: array, button:char):array {
-    let button = parseInt(button);
-
-    // center
-    if (button == 5) {
-        matrix[1][1] = reverse(matrix[1][1]);
+// get solving button
+function resolve(square) {
+    for (i = 1; i <= 9; i++) {
+        if (transform(square, button=i).localeCompare(solution) == 0) {
+            console.error("pressing button",i,"solves the square !")
+            return i
+        }
     }
-    
-    // corners
-    else if (button in [1, 3, 7, 9]) {
-        // 1 --> 00 01 10 11
-        // 3 --> 01 02 11 12
-        // 7 --> 01 11 20 21
-        // 9 --> 11 12 21 22
-    }
-    
-    // sides
-    else if (button in [2, 4, 6, 8]) {
-        // 2 --> 00 01 02
-        // 4 --> 00 10 20
-        // 6 --> 02 12 22
-        // 8 --> 20 21 22
-    }
-
-    return matrix;
 }
 
+// main sequence
 function main() {
-    var [matrix, buttons] = input();
-    
-    var answer = null;
-
-    console.log(answer);
+    var [square, buttons] = input();
+    console.error("input square is:", square);
+    console.error("pressed buttons are:", buttons);
+    for (const b of buttons) {
+        console.error("pressing:",b);
+        square = transform(square, button=parseInt(b));
+        console.error("got:",square);
+    }
+    console.log(resolve(square));
 }
+
+// run solution
+main()
